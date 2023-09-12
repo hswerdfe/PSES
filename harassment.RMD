@@ -1,0 +1,62 @@
+---
+title: "Harassment In The Public Service"
+author: "Howard Swerdfeger"
+date: "2022-11-29"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#setwd(file.path(path.expand('~'), '..', 'projects', 'PSES'))
+data_dir = 'data'
+fn_pattern <- "subset.*.csv"
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+library(stringr)
+library(forcats)
+library(dplyr)
+library(ggplot2)
+library(writexl)
+library(stringi)
+library(glue)
+library(purrr)
+library(here)
+library(Hmisc)
+library(kableExtra)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+dat <- 
+  list.files(path = data_dir, pattern = fn_pattern) |> 
+  map_dfr(\(.fn){
+    file.path('data', .fn) |> 
+    read_csv() |> 
+      mutate(fn = .fn) |>
+      mutate_all(as.character) |>
+      clean_names()
+    })
+
+dat |> 
+  sample_n(4) |>  
+  kable()
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
